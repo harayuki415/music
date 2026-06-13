@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mouse Beat</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <main class="shell">
+    <section class="stage-wrap" aria-label="Mouse Beat game">
+      <canvas id="dogScene" class="dog-scene" aria-hidden="true"></canvas>
+      <canvas id="burstCanvas" class="burst-canvas" width="1280" height="720"></canvas>
+      <div id="stage" class="stage">
+        <div class="grid-lines" aria-hidden="true"></div>
+        <div class="center-mark" aria-hidden="true"></div>
+      </div>
+
+      <header class="hud">
+        <div>
+          <span class="label">SCORE</span>
+          <strong id="score">0</strong>
+        </div>
+        <div>
+          <span class="label">COMBO</span>
+          <strong id="combo">0</strong>
+        </div>
+        <div>
+          <span class="label">BEST</span>
+          <strong id="best">0</strong>
+        </div>
+        <div>
+          <span class="label">JUDGE</span>
+          <strong id="judge">READY</strong>
+        </div>
+      </header>
+
+      <aside class="panel">
+        <div class="brand">Mouse Beat</div>
+        <button id="startBtn" class="primary">START</button>
+        <div class="controls">
+          <label>
+            BPM
+            <input id="bpm" type="range" min="90" max="170" value="124">
+            <span id="bpmValue">124</span>
+          </label>
+          <label>
+            SPEED
+            <input id="speed" type="range" min="1" max="3" step="1" value="2">
+            <span id="speedValue">NORMAL</span>
+          </label>
+        </div>
+      </aside>
+
+      <footer class="track">
+        <div id="progress" class="progress"></div>
+      </footer>
+      <div id="modelStatus" class="model-status">3D script starting...</div>
+    </section>
+  </main>
+
+  <script src="./game.js"></script>
+  <script type="module" src="./dog3d.js?v=20260613-4"></script>
+</body>
+</html>
