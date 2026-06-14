@@ -22,6 +22,8 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
 
 const fbxLoader = new FBXLoader();
 const root = new THREE.Group();
+const clock = new THREE.Clock();
+let mixer = null;
 scene.add(root);
 
 const keyLight = new THREE.DirectionalLight(0xffffff, 2.2);
@@ -180,9 +182,22 @@ function normalizeModel(object, options = {}) {
 
 function setDog(object, options = {}) {
   root.clear();
+  mixer = null;
   if (options.applyTexture) prepareMaterials(object);
-  root.add(normalizeModel(object, options));
-  setStatus(options.label || "3D model loaded", "ready");
+  const model = normalizeModel(object, options);
+  root.add(model);
+
+  if (object.animations?.length) {
+    mixer = new THREE.AnimationMixer(object);
+    const clip = object.animations[0];
+    const action = mixer.clipAction(clip);
+    action.reset();
+    action.play();
+    setStatus(`${options.label || "3D model loaded"} / animation: ${clip.name || "clip 1"}`, "ready");
+    return;
+  }
+
+  setStatus(`${options.label || "3D model loaded"} / no animation found`, "ready");
 }
 
 setStatus("Loading assets/dog.fbx...");
@@ -205,6 +220,8 @@ function resize() {
 
 function animate(time = 0) {
   const t = time * 0.001;
+  const delta = clock.getDelta();
+  if (mixer) mixer.update(delta);
   root.rotation.y = t * 0.55;
   root.position.set(0, Math.sin(t * 1.4) * 0.05, 0);
   rings.rotation.z = t * 0.18;
