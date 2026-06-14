@@ -12,6 +12,8 @@ const comboEl = document.querySelector("#combo");
 const bestEl = document.querySelector("#best");
 const judgeEl = document.querySelector("#judge");
 const progressEl = document.querySelector("#progress");
+const startScreen = document.querySelector("#startScreen");
+const introStartBtn = document.querySelector("#introStartBtn");
 
 const SPEEDS = {
   1: { label: "EASY", life: 1200, className: "" },
@@ -248,6 +250,7 @@ function finishGame() {
 
 function startGame() {
   ensureAudio();
+  startScreen?.classList.add("is-hidden");
   running = false;
   window.clearTimeout(beatTimer);
   window.clearTimeout(halfBeatTimer);
@@ -262,6 +265,7 @@ function startGame() {
 }
 
 startBtn.addEventListener("click", startGame);
+introStartBtn?.addEventListener("click", startGame);
 bpmInput.addEventListener("input", updateControls);
 speedInput.addEventListener("input", updateControls);
 window.addEventListener("resize", resizeCanvas);
