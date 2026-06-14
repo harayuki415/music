@@ -157,13 +157,13 @@ function normalizeModel(object, options = {}) {
   const size = box.getSize(new THREE.Vector3());
   const center = box.getCenter(new THREE.Vector3());
   const maxAxis = Math.max(size.x, size.y, size.z) || 1;
-  const scale = options.scale || 3.0 / maxAxis;
+  const scale = options.scale || 2.65 / maxAxis;
 
   object.position.set(-center.x, -center.y, -center.z);
   const holder = new THREE.Group();
   holder.add(object);
   holder.scale.setScalar(scale);
-  holder.position.y = 0.75;
+  holder.position.y = 1.9;
   holder.rotation.y = Math.PI;
 
   object.traverse((child) => {
