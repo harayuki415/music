@@ -62,12 +62,38 @@
         <div class="start-title" aria-hidden="true">
           <span>Mouse</span>
           <span>Beat</span>
-          <small>&lt;&lt; マウスビート &gt;&gt;</small>
+          <small>&lt;&lt; Mouse Rhythm &gt;&gt;</small>
         </div>
         <button id="introStartBtn" class="intro-start" type="button">
           <span>START</span>
           <small>&gt;&gt;&gt;</small>
         </button>
+      </section>
+
+      <section id="resultScreen" class="result-screen is-hidden" aria-label="Mouse Beat result screen">
+        <h1>RESULT</h1>
+        <div class="result-stats">
+          <div><span>SCORE</span><strong id="resultScore">0</strong></div>
+          <div><span>BEST</span><strong id="resultBest">0</strong></div>
+          <div><span>MAX COMBO</span><strong id="resultCombo">0</strong></div>
+          <div><span>ACCURACY</span><strong id="resultAccuracy">0%</strong></div>
+        </div>
+        <div class="result-main">
+          <div class="judge-list">
+            <p><span>PERFECT</span><strong id="resultPerfect">0</strong></p>
+            <p><span>GREAT</span><strong id="resultGreat">0</strong></p>
+            <p><span>GOOD</span><strong id="resultGood">0</strong></p>
+            <p><span>MISS</span><strong id="resultMiss">0</strong></p>
+          </div>
+          <div class="rank-badge">
+            <span id="resultRank">A</span>
+            <small id="resultClear">STAGE CLEAR</small>
+          </div>
+        </div>
+        <div class="result-actions">
+          <button id="retryBtn" class="result-button primary-result" type="button">RETRY</button>
+          <button id="titleBtn" class="result-button" type="button">TITLE</button>
+        </div>
       </section>
     </section>
   </main>

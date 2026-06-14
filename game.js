@@ -14,6 +14,19 @@ const judgeEl = document.querySelector("#judge");
 const progressEl = document.querySelector("#progress");
 const startScreen = document.querySelector("#startScreen");
 const introStartBtn = document.querySelector("#introStartBtn");
+const resultScreen = document.querySelector("#resultScreen");
+const retryBtn = document.querySelector("#retryBtn");
+const titleBtn = document.querySelector("#titleBtn");
+const resultScore = document.querySelector("#resultScore");
+const resultBest = document.querySelector("#resultBest");
+const resultCombo = document.querySelector("#resultCombo");
+const resultAccuracy = document.querySelector("#resultAccuracy");
+const resultPerfect = document.querySelector("#resultPerfect");
+const resultGreat = document.querySelector("#resultGreat");
+const resultGood = document.querySelector("#resultGood");
+const resultMiss = document.querySelector("#resultMiss");
+const resultRank = document.querySelector("#resultRank");
+const resultClear = document.querySelector("#resultClear");
 
 const SPEEDS = {
   1: { label: "EASY", life: 1200, className: "" },
@@ -33,6 +46,8 @@ let startedAt = 0;
 let roundLength = 45000;
 let beatIndex = 0;
 let particles = [];
+let maxCombo = 0;
+let counts = { perfect: 0, great: 0, good: 0, miss: 0 };
 
 bestEl.textContent = best.toLocaleString();
 
@@ -97,6 +112,8 @@ function updateControls() {
 function resetGame() {
   score = 0;
   combo = 0;
+  maxCombo = 0;
+  counts = { perfect: 0, great: 0, good: 0, miss: 0 };
   beatIndex = 0;
   scoreEl.textContent = "0";
   comboEl.textContent = "0";
@@ -150,7 +167,9 @@ function hitTarget(target, clientX, clientY) {
   const good = delta < 190;
   const kind = perfect ? "PERFECT" : good ? "GOOD" : "OK";
   const points = perfect ? 1100 : good ? 750 : 420;
+  counts[perfect ? "perfect" : good ? "great" : "good"] += 1;
   combo += 1;
+  maxCombo = Math.max(maxCombo, combo);
   score += points + combo * 9;
   scoreEl.textContent = score.toLocaleString();
   comboEl.textContent = combo.toLocaleString();
@@ -165,6 +184,7 @@ function hitTarget(target, clientX, clientY) {
 }
 
 function missTarget(target) {
+  counts.miss += 1;
   combo = 0;
   comboEl.textContent = "0";
   setJudge("MISS", "var(--red)");
@@ -246,11 +266,31 @@ function finishGame() {
     setJudge("FINISH");
   }
   startBtn.textContent = "RESTART";
+  showResult();
+}
+
+function showResult() {
+  const total = counts.perfect + counts.great + counts.good + counts.miss;
+  const weighted = counts.perfect + counts.great * 0.72 + counts.good * 0.42;
+  const accuracy = total ? Math.round((weighted / total) * 1000) / 10 : 0;
+  const rank = accuracy >= 98 ? "S" : accuracy >= 92 ? "A+" : accuracy >= 84 ? "A" : accuracy >= 72 ? "B" : "C";
+  resultScore.textContent = score.toLocaleString();
+  resultBest.textContent = best.toLocaleString();
+  resultCombo.textContent = maxCombo.toLocaleString();
+  resultAccuracy.textContent = `${accuracy.toFixed(1)}%`;
+  resultPerfect.textContent = counts.perfect.toLocaleString();
+  resultGreat.textContent = counts.great.toLocaleString();
+  resultGood.textContent = counts.good.toLocaleString();
+  resultMiss.textContent = counts.miss.toLocaleString();
+  resultRank.textContent = rank;
+  resultClear.textContent = counts.miss === 0 && total > 0 ? "FULL COMBO" : "STAGE CLEAR";
+  resultScreen?.classList.remove("is-hidden");
 }
 
 function startGame() {
   ensureAudio();
   startScreen?.classList.add("is-hidden");
+  resultScreen?.classList.add("is-hidden");
   running = false;
   window.clearTimeout(beatTimer);
   window.clearTimeout(halfBeatTimer);
@@ -266,6 +306,12 @@ function startGame() {
 
 startBtn.addEventListener("click", startGame);
 introStartBtn?.addEventListener("click", startGame);
+retryBtn?.addEventListener("click", startGame);
+titleBtn?.addEventListener("click", () => {
+  resultScreen?.classList.add("is-hidden");
+  startScreen?.classList.remove("is-hidden");
+  startBtn.textContent = "START";
+});
 bpmInput.addEventListener("input", updateControls);
 speedInput.addEventListener("input", updateControls);
 window.addEventListener("resize", resizeCanvas);
