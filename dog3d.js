@@ -163,7 +163,7 @@ function normalizeModel(object, options = {}) {
   const holder = new THREE.Group();
   holder.add(object);
   holder.scale.setScalar(scale);
-  holder.position.y = -1.0;
+  holder.position.y = -0.25;
   holder.rotation.y = Math.PI;
 
   object.traverse((child) => {
